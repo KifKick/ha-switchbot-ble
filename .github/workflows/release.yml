@@ -45,4 +45,4 @@ jobs:
           flags=()
           [[ "$GITHUB_REF_NAME" == *-* ]] && flags+=(--prerelease)
           gh release create "$GITHUB_REF_NAME" ha_switchbot_ble.zip \
-            --title "$GITHUB_REF_NAME" --generate-notes --verify-tag "${flags[@]}"
+            --title "${GITHUB_REF_NAME#v}" --generate-notes --verify-tag "${flags[@]}"

@@ -1,0 +1,6 @@
+# Generated release notes: Dependabot's workflow updates do not change the integration.
+changelog:
+  exclude:
+    authors:
+      - dependabot
+      - dependabot[bot]
