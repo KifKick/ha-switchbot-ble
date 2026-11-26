@@ -1,8 +1,5 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="custom_components/ha_switchbot_ble/brand/dark_logo.png">
-    <img alt="SwitchBot BLE+" src="custom_components/ha_switchbot_ble/brand/logo.png" width="480">
-  </picture>
+  <img alt="SwitchBot BLE+" src="custom_components/ha_switchbot_ble/brand/logo.png" width="480">
 </p>
 
 <p align="center">
