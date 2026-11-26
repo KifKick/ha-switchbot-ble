@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!--
+  Mock Home Assistant for the SwitchBot panel bundle (frontend/switchbot-panel.js).
+  Two thermo-hygrometers (one stores its correction in the sensor), a Lock Ultra
+  with entities and history, a Keypad and a Plug Mini. Every websocket call and
+  service call is appended to window.wsLog.
+-->
+<style>
+  :root {
+    --primary-color: #03a9f4; --primary-background-color: #fafafa; --secondary-background-color: #e5e5e5;
+    --card-background-color: #fff; --primary-text-color: #212121; --secondary-text-color: #727272;
+    --divider-color: rgba(0,0,0,.12); --error-color: #db4437; --success-color: #43a047; --warning-color: #ffa600;
+    --text-primary-color: #fff; --app-header-background-color: #03a9f4; --app-header-text-color: #fff;
+  }
+  :root.dark {
+    --primary-background-color: #111111; --secondary-background-color: #282828; --card-background-color: #1c1c1c;
+    --primary-text-color: #e1e1e1; --secondary-text-color: #9b9b9b; --divider-color: rgba(225,225,225,.12);
+    --app-header-background-color: #101e24;
+  }
+  body { margin: 0; font-family: Roboto, sans-serif; }
+</style>
+<script>
+  customElements.define("ha-menu-button", class extends HTMLElement {
+    connectedCallback() { this.style.cssText = "display:inline-block;width:40px;height:24px"; }
+  });
+  const params = new URLSearchParams(location.search);
+  window.wsLog = [];
+  try { localStorage.removeItem("switchbot-panel-demo"); } catch (e) {}
+
+  const F = { correction: false, device_calibration: false, lock_calibration: false, half_lock: false, auto_calibration: true, keypad: false };
+  const devices = [
+    { entry_id: "e1", device_id: "d-e1", name: "Thermo 0954", model: "indoor_outdoor_thermo_hygrometer", address: "AA:00:00:00:09:54",
+      available: true, kind: "sensor", features: { ...F, correction: true, device_calibration: true } },
+    { entry_id: "e2", device_id: "d-e2", name: "Thermo 442E", model: "indoor_outdoor_thermo_hygrometer", address: "AA:00:00:00:44:2E",
+      available: true, kind: "sensor", features: { ...F, correction: true } },
+    { entry_id: "l1", device_id: "d-l1", name: "Drzwi wejściowe", model: "lock_ultra", address: "AA:00:00:00:00:01",
+      available: true, kind: "lock", features: { ...F, lock_calibration: true, half_lock: true } },
+    { entry_id: "k1", device_id: "d-k1", name: "Keypad wejście", model: "keypad", address: "AA:00:00:00:00:02",
+      available: true, kind: "keypad", features: { ...F, keypad: true } },
+    { entry_id: "p1", device_id: "d-p1", name: "Gniazdko biuro", model: "plug_mini_eu", address: "AA:00:00:00:00:03",
+      available: false, kind: "plug", features: F },
+  ];
+  const sensors = {
+    e1: { entry_id: "e1", name: "Thermo 0954", model: "indoor_outdoor_thermo_hygrometer", available: true,
+          extras: { dew_point: 5.1 },
+          device_calibration: true, device_calibration_value: null,
+          values: { temperature: { raw: 21.4, offset: 0, entity_id: "sensor.thermo_0954_temperatura" },
+                    humidity: { raw: 48, offset: 0, entity_id: "sensor.thermo_0954_wilgotnosc" } } },
+    e2: { entry_id: "e2", name: "Thermo 442E", model: "indoor_outdoor_thermo_hygrometer", available: true,
+          extras: { dew_point: 8.1 },
+          device_calibration: false, device_calibration_value: null,
+          values: { temperature: { raw: 18.3, offset: -0.5, entity_id: "sensor.thermo_442e_temperatura" },
+                    humidity: { raw: 53, offset: 2, entity_id: "sensor.thermo_442e_wilgotnosc" } } },
+  };
+  const devcal = { e1: { temperature: 0.3, humidity: 0 } };
+
+  const st = (entity_id, state, attributes = {}) => ({ entity_id, state, attributes, last_changed: "", last_updated: "" });
+  const states = {};
+  const entities = {};
+  const add = (id, device, name, state, attrs = {}, category = null) => {
+    const dev = devices.find((d) => d.device_id === device);
+    states[id] = st(id, state, { friendly_name: `${dev.name} ${name}`.trim(), ...attrs });
+    entities[id] = { entity_id: id, device_id: device, platform: "ha_switchbot_ble", entity_category: category };
+  };
+  add("sensor.thermo_0954_temperatura", "d-e1", "Temperatura", "21.4", { device_class: "temperature", unit_of_measurement: "°C" });
+  add("sensor.thermo_0954_bateria", "d-e1", "Bateria", "64", { device_class: "battery", unit_of_measurement: "%" });
+  add("sensor.thermo_442e_temperatura", "d-e2", "Temperatura", "17.8", { device_class: "temperature", unit_of_measurement: "°C" });
+  add("sensor.thermo_442e_bateria", "d-e2", "Bateria", "9", { device_class: "battery", unit_of_measurement: "%" });
+  add("lock.drzwi_wejsciowe", "d-l1", "", "locked");
+  add("sensor.drzwi_wejsciowe_bateria", "d-l1", "Bateria", "87", { device_class: "battery", unit_of_measurement: "%" });
+  add("binary_sensor.drzwi_wejsciowe_drzwi", "d-l1", "Drzwi", "off", { device_class: "door" });
+  add("event.drzwi_wejsciowe_historia", "d-l1", "Historia", "2026-11-16T10:00:00+00:00", { event_type: "locked" });
+  add("switch.drzwi_wejsciowe_led", "d-l1", "Dioda LED", "on", {}, "config");
+  add("select.drzwi_wejsciowe_predkosc", "d-l1", "Prędkość silnika", "standard", { options: ["standard", "gentle", "fast"] }, "config");
+  add("number.drzwi_wejsciowe_glosnosc", "d-l1", "Głośność sygnałów", "2", { min: 0, max: 4, step: 1, mode: "slider" }, "config");
+  add("number.drzwi_wejsciowe_opoznienie", "d-l1", "Opóźnienie autozamykania", "30", { min: 0, max: 3659, step: 1, mode: "box", unit_of_measurement: "s" }, "config");
+  add("sensor.drzwi_wejsciowe_firmware", "d-l1", "Firmware", "1.4", {}, "diagnostic");
+  add("sensor.keypad_wejscie_bateria", "d-k1", "Bateria", "76", { device_class: "battery", unit_of_measurement: "%" });
+  add("event.keypad_wejscie_historia", "d-k1", "Historia", "2026-11-16T09:00:00+00:00", { event_type: "unlocked" });
+  add("switch.keypad_wejscie_dzwiek", "d-k1", "Dźwięk klawiszy", "off", {}, "config");
+  add("select.keypad_wejscie_podswietlenie", "d-k1", "Podświetlenie", "auto", { options: ["off", "auto", "on"] }, "config");
+  add("switch.gniazdko_biuro", "d-p1", "", "unavailable");
+  add("switch.gniazdko_biuro_led", "d-p1", "LED", "unavailable", {}, "config");
+
+  const keypad = {
+    entry_id: "k1", name: "Keypad wejście", model: "keypad", available: true,
+    state: { battery: 76, firmware: "1.2", passcodes_count: 2, nfc_cards_count: 0, lockout: true, passcode_locked_out: true,
+             tamper_alarm: false, keypad_enabled: true, tamper_alarm_enabled: true, sound_enabled: false,
+             backlight_mode: "auto", lock_button_mode: "timed", lock_button_time: 30 },
+    passcodes: { 3: { name: "Rodzina", type: "permanent", start: "2026-01-01T00:00:00+00:00", end: "2100-01-01T00:00:00+00:00" } },
+    cards: {},
+  };
+
+  let sensorCb = null;
+  let lockCb = null;
+  let keypadCb = null;
+  const lockStatus = { available: true, lock_state: 0, knob_angle: 110, door_open: false, calibration: true, battery: 87, lock_type: 0 };
+  window.pushRaw = (entry, key, raw) => { sensors[entry].values[key].raw = raw; sensorCb && sensorCb({ sensors: [structuredClone(sensors[entry])] }); };
+  window.setLock = (patch) => { Object.assign(lockStatus, patch); lockCb && lockCb({ status: { ...lockStatus }, started: false }); };
+
+  window.mockHass = {
+    language: params.get("lang") || "pl",
+    states, entities,
+    formatEntityState(s, state) {
+      const v = state ?? s.state;
+      return s.attributes.unit_of_measurement ? `${v} ${s.attributes.unit_of_measurement}` : v;
+    },
+    async callService(domain, service, data) {
+      window.wsLog.push({ type: "call_service", domain, service, ...data });
+      const s = states[data.entity_id];
+      if (domain === "switch") s.state = service === "turn_on" ? "on" : "off";
+      if (domain === "select") s.state = data.option;
+      if (domain === "number") s.state = String(data.value);
+    },
+    async callWS(msg) {
+      window.wsLog.push(msg);
+      switch (msg.type) {
+        case "ha_switchbot_ble/panel/devices":
+          return { devices, offset_limits: { temperature: [-10, 10], humidity: [-20, 20], co2: [-500, 500] } };
+        case "ha_switchbot_ble/sensors/set_offset":
+          sensors[msg.entry_id].values[msg.key].offset = msg.offset;
+          return { offset: msg.offset, sensor: structuredClone(sensors[msg.entry_id]) };
+        case "ha_switchbot_ble/sensors/device_calibration": {
+          await new Promise((r) => setTimeout(r, 150));
+          const s = sensors[msg.entry_id], c = devcal[msg.entry_id];
+          if (msg.action === "set") {
+            for (const k of ["temperature", "humidity"]) if (k in msg) {
+              // the sensor applies the new correction to what it advertises
+              s.values[k].raw = Math.round((s.values[k].raw - c[k] + msg[k]) * 10) / 10;
+              c[k] = msg[k];
+            }
+          }
+          s.device_calibration_value = { ...c };
+          return { calibration: { ...c }, sensor: structuredClone(s) };
+        }
+        case "ha_switchbot_ble/calibration/action": {
+          const a = msg.action;
+          if (a === "test_lock" || a === "lock") setTimeout(() => window.setLock({ lock_state: 0 }), 200);
+          if (a === "test_unlock") setTimeout(() => window.setLock({ lock_state: 1 }), 200);
+          return { success: true, status: { ...lockStatus } };
+        }
+        case "ha_switchbot_ble/keypad/op": {
+          if (msg.op === "add_passcode") {
+            keypad.passcodes[7] = { name: msg.data.name, type: msg.data.type, start: msg.data.start, end: msg.data.end || "2100-01-01T00:00:00+00:00" };
+            return { result: { index: 7 }, keypad: structuredClone(keypad) };
+          }
+          if (msg.op === "action" && msg.data.action === "cancel_passcode_lockout") {
+            Object.assign(keypad.state, { lockout: false, passcode_locked_out: false });
+          }
+          return { result: null, keypad: structuredClone(keypad) };
+        }
+        case "history/history_during_period":
+          if (msg.entity_ids[0].startsWith("event.keypad")) return { [msg.entity_ids[0]]: [
+            { s: "x", lu: 1763280000, a: { event_type: "verification_failed", source: "passcode", unknown_credential: true, time: "2026-11-16T08:00:00+00:00" } },
+            { s: "x", lu: 1763283600, a: { event_type: "unlocked", source: "passcode", credential_id: 3, credential_name: "Rodzina", time: "2026-11-16T09:00:00+00:00" } },
+          ] };
+          return { [msg.entity_ids[0]]: [
+            { s: "x", lu: 1763280000, a: { event_type: "unlocked", source: "keypad", credential: "passcode", credential_id: 3, time: "2026-11-16T08:00:00+00:00" } },
+            { s: "x", lu: 1763283600, a: { event_type: "lock_failed", source: "manual", time: "2026-11-16T09:00:00+00:00" } },
+            { s: "x", lu: 1763287200, a: { event_type: "locked", source: "auto_lock", time: "2026-11-16T10:00:00+00:00" } },
+          ] };
+        default:
+          throw new Error(`unexpected ${msg.type}`);
+      }
+    },
+    connection: {
+      async subscribeMessage(cb, msg) {
+        window.wsLog.push(msg);
+        if (msg.type === "ha_switchbot_ble/sensors/subscribe") {
+          sensorCb = cb;
+          setTimeout(() => cb({ sensors: Object.values(sensors).map((s) => structuredClone(s)), full: true }), 10);
+        } else if (msg.type === "ha_switchbot_ble/calibration/subscribe") {
+          lockCb = cb;
+          setTimeout(() => cb({ status: { ...lockStatus }, started: false }), 10);
+        } else if (msg.type === "ha_switchbot_ble/keypad/subscribe") {
+          keypadCb = cb;
+          setTimeout(() => cb({ keypads: [structuredClone(keypad)], full: true }), 10);
+        }
+        return () => {};
+      },
+    },
+  };
+</script>
+<script type="module" src="http://panel.test/frontend/switchbot-panel.js"></script>
+</head>
+<body>
+<switchbot-panel id="p"></switchbot-panel>
+</body>
+</html>

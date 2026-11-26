@@ -1,0 +1,158 @@
+"""Support for Switchbot humidifier."""
+
+import logging
+from typing import Any, override
+
+from homeassistant.components.humidifier import (
+    MODE_AUTO,
+    MODE_NORMAL,
+    HumidifierAction,
+    HumidifierDeviceClass,
+    HumidifierEntity,
+    HumidifierEntityFeature,
+)
+from homeassistant.const import Platform
+
+from .entity import SwitchbotSwitchedEntity, exception_handler, platform_setup
+from .sbble.devices.air.evaporative_humidifier import (
+    EvaporativeHumidifier,
+    HumidifierAction as SwitchbotHumidifierAction,
+    HumidifierMode,
+)
+from .sbble.devices.air.humidifier import Humidifier
+
+_LOGGER = logging.getLogger(__name__)
+PARALLEL_UPDATES = 0
+EVAPORATIVE_HUMIDIFIER_ACTION_MAP: dict[int, HumidifierAction] = {
+    SwitchbotHumidifierAction.OFF: HumidifierAction.OFF,
+    SwitchbotHumidifierAction.HUMIDIFYING: HumidifierAction.HUMIDIFYING,
+    SwitchbotHumidifierAction.DRYING: HumidifierAction.DRYING,
+}
+
+
+class SwitchBotHumidifier(SwitchbotSwitchedEntity, HumidifierEntity):
+    """Representation of a Switchbot humidifier."""
+
+    _attr_supported_features = HumidifierEntityFeature.MODES
+    _attr_device_class = HumidifierDeviceClass.HUMIDIFIER
+    _attr_available_modes = [MODE_NORMAL, MODE_AUTO]
+    _device: Humidifier
+    _attr_min_humidity = 1
+    _attr_translation_key = "humidifier"
+    _attr_name = None
+
+    @property
+    @override
+    def is_on(self) -> bool | None:
+        """Return true if device is on."""
+        return self._device.is_on()
+
+    @property
+    @override
+    def mode(self) -> str:
+        """Return the current mode (auto or normal)."""
+        return MODE_AUTO if self._device.is_auto() else MODE_NORMAL
+
+    @property
+    @override
+    def target_humidity(self) -> int | None:
+        """Return the humidity we try to reach."""
+        return self._device.get_target_humidity()
+
+    @exception_handler
+    @override
+    async def async_set_humidity(self, humidity: int) -> None:
+        """Set new target humidity."""
+        await self._device.set_level(humidity)
+        self.async_write_ha_state()
+
+    @exception_handler
+    @override
+    async def async_set_mode(self, mode: str) -> None:
+        """Set the mode (auto or normal)."""
+        if mode == MODE_AUTO:
+            await self._device.async_set_auto()
+        else:
+            await self._device.async_set_manual()
+        self.async_write_ha_state()
+
+
+class SwitchBotEvaporativeHumidifier(SwitchbotSwitchedEntity, HumidifierEntity):
+    """Representation of a Switchbot evaporative humidifier."""
+
+    _device: EvaporativeHumidifier
+    _attr_device_class = HumidifierDeviceClass.HUMIDIFIER
+    _attr_supported_features = HumidifierEntityFeature.MODES
+    _attr_available_modes = HumidifierMode.get_modes()
+    _attr_min_humidity = 1
+    _attr_max_humidity = 99
+    _attr_translation_key = "evaporative_humidifier"
+    _attr_name = None
+
+    @property
+    @override
+    def is_on(self) -> bool | None:
+        """Return true if device is on."""
+        return self._device.is_on()
+
+    @property
+    @override
+    def mode(self) -> str:
+        """Return the evaporative humidifier current mode."""
+        # unknown modes are None instead of raising in the parser
+        return mode.name.lower() if (mode := self._device.get_mode()) else None
+
+    @property
+    @override
+    def current_humidity(self) -> int | None:
+        """Return the current humidity."""
+        return self._device.get_humidity()
+
+    @property
+    @override
+    def target_humidity(self) -> int | None:
+        """Return the humidity we try to reach."""
+        return self._device.get_target_humidity()
+
+    @property
+    @override
+    def action(self) -> HumidifierAction | None:
+        """Return the current action."""
+        return EVAPORATIVE_HUMIDIFIER_ACTION_MAP.get(
+            self._device.get_action(), HumidifierAction.IDLE
+        )
+
+    @exception_handler
+    @override
+    async def async_set_humidity(self, humidity: int) -> None:
+        """Set new target humidity."""
+        _LOGGER.debug("Setting target humidity to: %s %s", humidity, self._address)
+        await self._device.set_target_humidity(humidity)
+        self.async_write_ha_state()
+
+    @exception_handler
+    @override
+    async def async_set_mode(self, mode: str) -> None:
+        """Set new evaporative humidifier mode."""
+        _LOGGER.debug("Setting mode to: %s %s", mode, self._address)
+        await self._device.set_mode(HumidifierMode[mode.upper()])
+        self.async_write_ha_state()
+
+    @exception_handler
+    @override
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        """Turn on the humidifier."""
+        _LOGGER.debug("Turning on the humidifier %s", self._address)
+        await self._device.turn_on()
+        self.async_write_ha_state()
+
+    @exception_handler
+    @override
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        """Turn off the humidifier."""
+        _LOGGER.debug("Turning off the humidifier %s", self._address)
+        await self._device.turn_off()
+        self.async_write_ha_state()
+
+
+async_setup_entry = platform_setup(Platform.HUMIDIFIER)

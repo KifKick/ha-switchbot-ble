@@ -1,0 +1,20 @@
+{
+  "name": "ha-switchbot-ble-panel",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Sidebar panel of SwitchBot BLE (extended) (built into custom_components/ha_switchbot_ble/frontend/switchbot-panel.js)",
+  "scripts": {
+    "build": "tsc --noEmit && node build.mjs",
+    "watch": "node build.mjs --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mdi/js": "7.4.47",
+    "lit": "3.2.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.0",
+    "typescript": "5.6.3"
+  }
+}

@@ -1,0 +1,1173 @@
+{
+    "config": {
+        "abort": {
+            "already_configured_device": "Urz\u0105dzenie jest ju\u017c skonfigurowane",
+            "api_error": "B\u0142\u0105d komunikacji z API SwitchBot: {error_detail}",
+            "no_devices_found": "Nie znaleziono w zasi\u0119gu obs\u0142ugiwanych urz\u0105dze\u0144 SwitchBot. Je\u015bli urz\u0105dzenie jest w zasi\u0119gu, upewnij si\u0119, \u017ce skaner ma w\u0142\u0105czone aktywne skanowanie \u2013 urz\u0105dze\u0144 SwitchBot nie da si\u0119 wykry\u0107 skanowaniem pasywnym. Po skonfigurowaniu urz\u0105dzenia aktywne skanowanie mo\u017cna wy\u0142\u0105czy\u0107. Aby sprawdzi\u0107, czy urz\u0105dzenie jest w zasi\u0119gu, pobierz diagnostyk\u0119 integracji, kt\u00f3ra udost\u0119pnia adapter lub proxy Bluetooth, i poszukaj w niej adresu MAC urz\u0105dzenia SwitchBot.",
+            "switchbot_unsupported_type": "Nieobs\u0142ugiwany typ urz\u0105dzenia SwitchBot.",
+            "unknown": "Nieoczekiwany b\u0142\u0105d",
+            "oauth_error": "SwitchBot zwr\u00f3ci\u0142 nieprawid\u0142owe dane tokenu.",
+            "oauth_failed": "B\u0142\u0105d podczas pobierania tokenu dost\u0119pu z SwitchBot.",
+            "oauth_timeout": "Przekroczono czas oczekiwania na token OAuth.",
+            "oauth_unauthorized": "SwitchBot odrzuci\u0142 logowanie (b\u0142\u0105d autoryzacji).",
+            "oauth_implementation_unavailable": "Us\u0142uga OAuth SwitchBot jest niedost\u0119pna.",
+            "missing_configuration": "OAuth nie jest skonfigurowany.",
+            "missing_credentials": "OAuth wymaga danych uwierzytelniaj\u0105cych aplikacji.",
+            "authorize_url_timeout": "Przekroczono czas generowania adresu autoryzacji.",
+            "no_url_available": "Brak dost\u0119pnego adresu URL. Skonfiguruj My Home Assistant lub zewn\u0119trzny adres tej instancji.",
+            "user_rejected_authorize": "Logowanie zosta\u0142o odrzucone w SwitchBot."
+        },
+        "error": {
+            "auth_failed": "Uwierzytelnianie nie powiod\u0142o si\u0119: {error_detail}",
+            "encryption_key_invalid": "Nieprawid\u0142owy identyfikator klucza lub klucz szyfrowania",
+            "unknown": "Nieoczekiwany b\u0142\u0105d"
+        },
+        "flow_title": "{name} ({address})",
+        "step": {
+            "cloud_login": {
+                "data": {
+                    "password": "Has\u0142o",
+                    "username": "Nazwa u\u017cytkownika"
+                },
+                "data_description": {
+                    "password": "Has\u0142o do konta SwitchBot",
+                    "username": "Nazwa u\u017cytkownika konta SwitchBot"
+                },
+                "description": "Podaj nazw\u0119 u\u017cytkownika i has\u0142o z aplikacji SwitchBot. Dane nie zostan\u0105 zapisane \u2013 s\u0142u\u017c\u0105 tylko do pobrania informacji o modelach urz\u0105dze\u0144, aby zautomatyzowa\u0107 wykrywanie. Wielko\u015b\u0107 liter ma znaczenie."
+            },
+            "confirm": {
+                "description": "Czy chcesz skonfigurowa\u0107 {name}?"
+            },
+            "encrypted_auth": {
+                "data": {
+                    "password": "Has\u0142o",
+                    "username": "Nazwa u\u017cytkownika"
+                },
+                "data_description": {
+                    "password": "Has\u0142o do konta SwitchBot",
+                    "username": "Nazwa u\u017cytkownika konta SwitchBot"
+                },
+                "description": "Podaj nazw\u0119 u\u017cytkownika i has\u0142o z aplikacji SwitchBot. Dane nie zostan\u0105 zapisane \u2013 s\u0142u\u017c\u0105 tylko do pobrania klucza szyfrowania urz\u0105dzenia. Wielko\u015b\u0107 liter ma znaczenie."
+            },
+            "encrypted_choose_method": {
+                "description": "{name} szyfruje komunikacj\u0119. Klucz mo\u017cna pobra\u0107 z konta SwitchBot (OAuth albo e-mail i has\u0142o; ani token, ani has\u0142o nie s\u0105 zapisywane) lub wpisa\u0107 r\u0119cznie.",
+                "menu_options": {
+                    "encrypted_auth": "Zaloguj e-mailem i has\u0142em",
+                    "encrypted_key": "Wpisz klucz szyfrowania r\u0119cznie",
+                    "encrypted_oauth": "Zaloguj przez SwitchBot (OAuth, zalecane)"
+                }
+            },
+            "encrypted_key": {
+                "data": {
+                    "encryption_key": "Klucz szyfrowania",
+                    "key_id": "Identyfikator klucza"
+                },
+                "data_description": {
+                    "encryption_key": "Klucz szyfrowania urz\u0105dzenia",
+                    "key_id": "Identyfikator klucza szyfrowania"
+                },
+                "description": "Urz\u0105dzenie {name} wymaga klucza szyfrowania. Jak go zdoby\u0107, opisuje dokumentacja."
+            },
+            "password": {
+                "data": {
+                    "password": "Has\u0142o"
+                },
+                "data_description": {
+                    "password": "Has\u0142o wymagane do dost\u0119pu do urz\u0105dzenia Bot"
+                },
+                "description": "Urz\u0105dzenie {name} wymaga has\u0142a"
+            },
+            "select_device": {
+                "data": {
+                    "address": "Adres MAC"
+                },
+                "data_description": {
+                    "address": "Adres MAC Bluetooth urz\u0105dzenia SwitchBot"
+                }
+            },
+            "user": {
+                "description": "Logowanie pobiera list\u0119 urz\u0105dze\u0144 z konta SwitchBot, co pomaga wykry\u0107 urz\u0105dzenia za skanerami pasywnymi. OAuth loguje na stronie SwitchBot; nic nie jest zapisywane.",
+                "menu_options": {
+                    "cloud_login": "Zaloguj e-mailem i has\u0142em",
+                    "select_device": "Kontynuuj bez logowania",
+                    "import_core": "Przejmij z wbudowanej integracji SwitchBot",
+                    "oauth_login": "Zaloguj przez SwitchBot (OAuth, zalecane)"
+                }
+            },
+            "import_core": {
+                "title": "Przejmij urz\u0105dzenie",
+                "description": "Encje urz\u0105dzenia razem z histori\u0105 i automatyzacjami przejd\u0105 tutaj; wpis wbudowanej integracji zostanie usuni\u0119ty.",
+                "data": {
+                    "import_from": "Urz\u0105dzenie"
+                }
+            },
+            "pick_implementation": {
+                "title": "Wybierz metod\u0119 uwierzytelniania"
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "calibration": {
+                "name": "Kalibracja"
+            },
+            "door_auto_lock_paused": {
+                "name": "Automatyczne zamykanie wstrzymane"
+            },
+            "door_unclosed_alarm": {
+                "name": "Alarm otwartych drzwi"
+            },
+            "door_unlocked_alarm": {
+                "name": "Alarm niezamkni\u0119tego zamka"
+            },
+            "duress_alarm": {
+                "name": "Alarm przymusu"
+            },
+            "half_lock_calibration": {
+                "name": "Kalibracja cz\u0119\u015bciowego zamkni\u0119cia"
+            },
+            "half_locked": {
+                "name": "Cz\u0119\u015bciowo zamkni\u0119ty"
+            },
+            "high_temperature": {
+                "name": "Wysoka temperatura"
+            },
+            "lockout_alarm": {
+                "name": "Alarm blokady"
+            },
+            "low_temperature": {
+                "name": "Niska temperatura"
+            },
+            "power_alarm": {
+                "name": "Za ma\u0142a si\u0142a silnika"
+            },
+            "low_temperature_alarm": {
+                "name": "Alarm niskiej temperatury"
+            },
+            "magnetic_position_alarm": {
+                "name": "Ostrze\u017cenie pozycji czujnika drzwi"
+            },
+            "night_mode_active": {
+                "name": "Tryb nocny aktywny"
+            },
+            "on_backup_battery": {
+                "name": "Zasilanie z baterii zapasowej"
+            },
+            "auto_calibration_done": {
+                "name": "Automatyczna kalibracja zako\u0144czona"
+            },
+            "night_lock_at_start": {
+                "name": "Zamknij na pocz\u0105tku trybu nocnego"
+            },
+            "night_disable_auto_unlock": {
+                "name": "Wy\u0142\u0105cz automatyczne otwieranie w nocy"
+            },
+            "night_auto_lock_enabled": {
+                "name": "Nocne automatyczne zamykanie"
+            },
+            "night_sound_enabled": {
+                "name": "D\u017awi\u0119k w nocy"
+            },
+            "lockout": {
+                "name": "Blokada po b\u0142\u0119dnych pr\u00f3bach"
+            },
+            "passcode_locked_out": {
+                "name": "Blokada kod\u00f3w"
+            },
+            "nfc_locked_out": {
+                "name": "Blokada kart"
+            },
+            "fingerprint_locked_out": {
+                "name": "Blokada odcisk\u00f3w"
+            },
+            "tamper_alarm": {
+                "name": "Alarm zdj\u0119cia z mocowania"
+            },
+            "left_pack_inserted": {
+                "name": "Lewy pakiet baterii"
+            },
+            "right_pack_inserted": {
+                "name": "Prawy pakiet baterii"
+            },
+            "filter_door_open": {
+                "name": "Klapka filtra"
+            },
+            "voc_sensor_fault": {
+                "name": "Awaria czujnika VOC"
+            },
+            "pm25_sensor_fault": {
+                "name": "Awaria czujnika PM2.5"
+            },
+            "fan_fault": {
+                "name": "Awaria wentylatora"
+            },
+            "dnd_active": {
+                "name": "Tryb nie przeszkadza\u0107 aktywny"
+            },
+            "tank_removed": {
+                "name": "Zbiornik wody wyj\u0119ty"
+            },
+            "tilted_alert": {
+                "name": "Przechylenie"
+            },
+            "filter_missing": {
+                "name": "Brak filtra"
+            },
+            "meter_online": {
+                "name": "Powi\u0105zany termometr"
+            },
+            "is_meter_binded": {
+                "name": "Termometr powi\u0105zany"
+            },
+            "delay_active": {
+                "name": "Op\u00f3\u017anienie aktywne"
+            },
+            "window_open": {
+                "name": "Okno otwarte"
+            },
+            "valve_open": {
+                "name": "Zaw\u00f3r"
+            },
+            "fault": {
+                "name": "Usterka"
+            },
+            "restarted": {
+                "name": "Restart (wymaga kalibracji)"
+            },
+            "mcu_updating": {
+                "name": "Aktualizacja MCU"
+            },
+            "led_enabled": {
+                "name": "Lampka wska\u017anika"
+            },
+            "led_state": {
+                "name": "Lampka wska\u017anika"
+            },
+            "adaptive_state": {
+                "name": "Autokalibracja wykonana"
+            },
+            "alarm_active": {
+                "name": "Alarm"
+            },
+            "buzzer_ringing": {
+                "name": "Brz\u0119czyk"
+            },
+            "wifi_fault": {
+                "name": "B\u0142\u0105d Wi-Fi"
+            },
+            "solar_panel": {
+                "name": "Panel s\u0142oneczny"
+            },
+            "overheating": {
+                "name": "Przegrzanie"
+            },
+            "magnet_alarm": {
+                "name": "Alarm magnesu pozycjonuj\u0105cego"
+            },
+            "extended_battery_installed": {
+                "name": "Dodatkowa bateria za\u0142o\u017cona"
+            },
+            "stuck": {
+                "name": "Zablokowanie"
+            },
+            "allow_connect": {
+                "name": "Przyjmuje po\u0142\u0105czenia"
+            }
+        },
+        "button": {
+            "half_lock": {
+                "name": "Zamknij cz\u0119\u015bciowo"
+            },
+            "light_sensor": {
+                "name": "Czujnik \u015bwiat\u0142a"
+            },
+            "reset_filter_usage": {
+                "name": "Zeruj zu\u017cycie filtra"
+            },
+            "sync_datetime": {
+                "name": "Synchronizuj dat\u0119 i czas"
+            },
+            "refresh_settings": {
+                "name": "Od\u015bwie\u017c ustawienia"
+            },
+            "cancel_passcode_lockout": {
+                "name": "Zdejmij blokad\u0119 kod\u00f3w"
+            },
+            "cancel_nfc_lockout": {
+                "name": "Zdejmij blokad\u0119 kart"
+            },
+            "clear_tamper_alarm": {
+                "name": "Skasuj alarm zdj\u0119cia z mocowania"
+            },
+            "cancel_duress_alarm": {
+                "name": "Anuluj alarm przymusu"
+            },
+            "sync_time": {
+                "name": "Ustaw zegar"
+            },
+            "locate": {
+                "name": "Zlokalizuj"
+            },
+            "toggle": {
+                "name": "Prze\u0142\u0105cz (otw\u00f3rz / stop / zamknij)"
+            }
+        },
+        "climate": {
+            "climate": {
+                "state_attributes": {
+                    "preset_mode": {
+                        "state": {
+                            "manual": "R\u0119czny",
+                            "off": "Wy\u0142\u0105czony",
+                            "schedule": "Harmonogram"
+                        }
+                    }
+                }
+            }
+        },
+        "cover": {
+            "cover": {
+                "state_attributes": {
+                    "speed": {
+                        "state": {
+                            "silent": "Cicha",
+                            "default": "Domy\u015blna urz\u0105dzenia",
+                            "performance": "Wydajna",
+                            "quietdrift": "QuietDrift"
+                        }
+                    }
+                }
+            },
+            "roller_shade": {
+                "state_attributes": {
+                    "speed": {
+                        "state": {
+                            "performance": "Wydajna",
+                            "quietdrift": "QuietDrift"
+                        }
+                    }
+                }
+            }
+        },
+        "event": {
+            "off_button": {
+                "name": "Przycisk OFF",
+                "state_attributes": {
+                    "event_type": {
+                        "state": {
+                            "press": "Naci\u015bni\u0119cie"
+                        }
+                    }
+                }
+            },
+            "on_button": {
+                "name": "Przycisk ON",
+                "state_attributes": {
+                    "event_type": {
+                        "state": {
+                            "press": "Naci\u015bni\u0119cie"
+                        }
+                    }
+                }
+            },
+            "history": {
+                "name": "Historia",
+                "state_attributes": {
+                    "event_type": {
+                        "state": {
+                            "locked": "Zamkni\u0119to",
+                            "lock_failed": "Zamkni\u0119cie nieudane",
+                            "half_locked": "Zamkni\u0119to do po\u0142owy",
+                            "latch_released": "Zwolniono zatrzask",
+                            "latch_release_failed": "Zwolnienie zatrzasku nieudane",
+                            "unlocked": "Otwarto",
+                            "unlock_failed": "Otwarcie nieudane",
+                            "emergency_unlock": "Otwarcie awaryjne",
+                            "door_left_open": "Drzwi zostawione otwarte",
+                            "left_unlocked": "Zostawiono otwarte",
+                            "low_temperature": "Niska temperatura",
+                            "low_power": "Za ma\u0142a moc",
+                            "work_mode": "Zmiana trybu pracy"
+                        }
+                    }
+                }
+            },
+            "keypad_history": {
+                "name": "Historia",
+                "state_attributes": {
+                    "event_type": {
+                        "state": {
+                            "unlocked": "Otwarto",
+                            "unlock_failed": "Otwarcie nieudane",
+                            "verification_failed": "B\u0142\u0119dny kod lub karta",
+                            "expired_credential": "Niewa\u017cny kod lub karta",
+                            "locked": "Zamkni\u0119to przyciskiem",
+                            "lock_failed": "Zamkni\u0119cie nieudane",
+                            "low_battery": "S\u0142aba bateria",
+                            "locked_out": "Blokada po b\u0142\u0119dach",
+                            "tamper": "Zdj\u0119ty z mocowania",
+                            "doorbell": "Dzwonek",
+                            "doorbell_scene": "Dzwonek \u2013 scena",
+                            "unknown": "Nieznane"
+                        }
+                    }
+                }
+            }
+        },
+        "fan": {
+            "air_purifier": {
+                "state_attributes": {
+                    "preset_mode": {
+                        "state": {
+                            "auto": "auto",
+                            "level_1": "Poziom 1",
+                            "level_2": "Poziom 2",
+                            "level_3": "Poziom 3",
+                            "pet": "Zwierz\u0119ta",
+                            "sleep": "Sen"
+                        }
+                    }
+                }
+            },
+            "fan": {
+                "state_attributes": {
+                    "preset_mode": {
+                        "state": {
+                            "baby": "Dziecko",
+                            "hurricane": "Huragan",
+                            "natural": "Naturalny",
+                            "normal": "Normalny",
+                            "sleep": "Sen"
+                        }
+                    }
+                }
+            },
+            "standing_fan": {
+                "state_attributes": {
+                    "preset_mode": {
+                        "state": {
+                            "baby": "Dziecko",
+                            "custom_natural": "W\u0142asny naturalny",
+                            "natural": "Naturalny",
+                            "normal": "Normalny",
+                            "sleep": "Sen"
+                        }
+                    }
+                }
+            }
+        },
+        "humidifier": {
+            "evaporative_humidifier": {
+                "state_attributes": {
+                    "mode": {
+                        "state": {
+                            "auto": "Automatyczny",
+                            "drying_filter": "Suszenie filtra",
+                            "high": "Wysoki",
+                            "low": "Niski",
+                            "medium": "\u015aredni",
+                            "quiet": "Cichy",
+                            "sleep": "Sen",
+                            "target_humidity": "Docelowa wilgotno\u015b\u0107"
+                        }
+                    }
+                }
+            },
+            "humidifier": {}
+        },
+        "light": {
+            "air_purifier_light": {
+                "name": "\u015awiat\u0142o"
+            },
+            "circulator_fan_pro_light": {
+                "name": "\u015awiat\u0142o"
+            },
+            "light": {
+                "state_attributes": {
+                    "effect": {
+                        "state": {
+                            "alarm": "Alarm",
+                            "autumn": "Jesie\u0144",
+                            "breathing": "Oddychanie",
+                            "cherry_blossom": "Kwiat wi\u015bni",
+                            "christmas": "Bo\u017ce Narodzenie",
+                            "colorful": "Kolorowy",
+                            "cool": "Ch\u0142odny",
+                            "dream": "Marzenie",
+                            "dynamic": "Dynamiczny",
+                            "energy": "Energia",
+                            "fade": "Przenikanie",
+                            "fireworks": "Fajerwerki",
+                            "flashing": "B\u0142yskanie",
+                            "flickering": "Migotanie",
+                            "flow": "Przep\u0142yw",
+                            "forest": "Las",
+                            "game": "Gra",
+                            "halloween": "Halloween",
+                            "heartbeat": "Bicie serca",
+                            "lightning": "B\u0142yskawica",
+                            "meditation": "Medytacja",
+                            "modern": "Nowoczesny",
+                            "movie": "Film",
+                            "mystery": "Tajemnica",
+                            "new_year": "Nowy Rok",
+                            "ocean": "Ocean",
+                            "party": "Impreza",
+                            "rainbow": "T\u0119cza",
+                            "relax": "Relaks",
+                            "rock": "Rock",
+                            "romance": "Romantyczny",
+                            "rose": "R\u00f3\u017ca",
+                            "sleep": "Sen",
+                            "smooth": "P\u0142ynny",
+                            "starlight": "Blask gwiazd",
+                            "starlit_sky": "Gwia\u017adziste niebo",
+                            "strobe": "Stroboskop",
+                            "sunrise": "Wsch\u00f3d s\u0142o\u0144ca",
+                            "sunset": "Zach\u00f3d s\u0142o\u0144ca",
+                            "valentine_day": "Walentynki",
+                            "vitality": "Witalno\u015b\u0107",
+                            "waves": "Fale"
+                        }
+                    }
+                }
+            }
+        },
+        "lock": {
+            "lock": {}
+        },
+        "number": {
+            "display_time_offset": {
+                "name": "Przesuni\u0119cie czasu na wy\u015bwietlaczu"
+            },
+            "horizontal_oscillation_angle": {
+                "name": "K\u0105t oscylacji poziomej"
+            },
+            "vertical_oscillation_angle": {
+                "name": "K\u0105t oscylacji pionowej"
+            },
+            "auto_lock_delay": {
+                "name": "Op\u00f3\u017anienie automatycznego zamykania"
+            },
+            "force_auto_lock_delay": {
+                "name": "Op\u00f3\u017anienie wymuszonego zamykania"
+            },
+            "unclosed_alarm_delay": {
+                "name": "Op\u00f3\u017anienie alarmu otwartych drzwi"
+            },
+            "unlocked_alarm_delay": {
+                "name": "Op\u00f3\u017anienie alarmu niezamkni\u0119tego zamka"
+            },
+            "eu_button_relock_delay": {
+                "name": "Op\u00f3\u017anienie ponownego zamkni\u0119cia (przycisk)"
+            },
+            "lock_button_time": {
+                "name": "Czas aktywno\u015bci przycisku zamykania"
+            },
+            "beep_volume": {
+                "name": "G\u0142o\u015bno\u015b\u0107 sygna\u0142\u00f3w"
+            },
+            "voice_volume": {
+                "name": "G\u0142o\u015bno\u015b\u0107 g\u0142osu"
+            },
+            "off_timer": {
+                "name": "Wy\u0142\u0105cznik czasowy"
+            },
+            "over_humidify_threshold": {
+                "name": "Pr\u00f3g ochrony przed przewil\u017ceniem"
+            },
+            "comfort_target_temp": {
+                "name": "Temperatura komfortowa"
+            },
+            "economic_target_temp": {
+                "name": "Temperatura eko"
+            },
+            "manual_target_temp": {
+                "name": "Temperatura r\u0119czna"
+            },
+            "fast_heat_time": {
+                "name": "Czas szybkiego grzania"
+            },
+            "response_time": {
+                "name": "Czas reakcji"
+            },
+            "temperature_calibration": {
+                "name": "Kalibracja temperatury"
+            }
+        },
+        "select": {
+            "night_light": {
+                "name": "Lampka nocna",
+                "state": {
+                    "bright": "Jasna",
+                    "off": "Wy\u0142\u0105czona",
+                    "soft": "\u0141agodna"
+                }
+            },
+            "time_format": {
+                "name": "Format czasu",
+                "state": {
+                    "12h": "12-godzinny (AM/PM)",
+                    "24h": "24-godzinny"
+                }
+            },
+            "button_action": {
+                "name": "Akcja przycisku na zamku",
+                "state": {
+                    "lock": "Zamknij",
+                    "unlock": "Otw\u00f3rz",
+                    "toggle": "Prze\u0142\u0105cz"
+                }
+            },
+            "button_trigger": {
+                "name": "Wyzwalanie przycisku na zamku",
+                "state": {
+                    "single_press": "Pojedyncze naci\u015bni\u0119cie",
+                    "double_press": "Podw\u00f3jne naci\u015bni\u0119cie"
+                }
+            },
+            "motor_speed": {
+                "name": "Pr\u0119dko\u015b\u0107 silnika",
+                "state": {
+                    "fast": "Szybka",
+                    "normal": "Normalna",
+                    "quiet": "Cicha"
+                }
+            },
+            "quick_unlock_mode": {
+                "name": "Tryb szybkiego otwarcia",
+                "state": {
+                    "full_unlock": "Pe\u0142ne otwarcie",
+                    "unlatch_only": "Tylko zapadka"
+                }
+            },
+            "eu_button_single_action": {
+                "name": "Akcja pojedynczego naci\u015bni\u0119cia",
+                "state": {
+                    "lock": "Zamknij",
+                    "unlock_to_open": "Otw\u00f3rz drzwi",
+                    "toggle_open": "Prze\u0142\u0105cz (otw\u00f3rz drzwi)",
+                    "toggle_unlatch": "Prze\u0142\u0105cz (zapadka)",
+                    "unlatch": "Odci\u0105gnij zapadk\u0119",
+                    "relock_after_unlock": "Zamknij ponownie po otwarciu",
+                    "none": "Brak akcji"
+                }
+            },
+            "eu_button_double_action": {
+                "name": "Akcja podw\u00f3jnego naci\u015bni\u0119cia",
+                "state": {
+                    "lock": "Zamknij",
+                    "unlock_to_open": "Otw\u00f3rz drzwi",
+                    "toggle_open": "Prze\u0142\u0105cz (otw\u00f3rz drzwi)",
+                    "toggle_unlatch": "Prze\u0142\u0105cz (zapadka)",
+                    "unlatch": "Odci\u0105gnij zapadk\u0119",
+                    "relock_after_unlock": "Zamknij ponownie po otwarciu",
+                    "none": "Brak akcji"
+                }
+            },
+            "backlight_mode": {
+                "name": "Pod\u015bwietlenie",
+                "state": {
+                    "off": "Wy\u0142\u0105czone",
+                    "auto": "Automatyczne",
+                    "on": "Zawsze w\u0142\u0105czone"
+                }
+            },
+            "lock_button_mode": {
+                "name": "Przycisk zamykania",
+                "state": {
+                    "off": "Wy\u0142\u0105czony",
+                    "always": "Zawsze aktywny",
+                    "timed": "Aktywny przez chwil\u0119"
+                }
+            },
+            "power_on_state": {
+                "name": "Stan po zaniku pr\u0105du",
+                "state": {
+                    "off": "Wy\u0142\u0105czona",
+                    "on": "W\u0142\u0105czona",
+                    "last_state": "Ostatni stan"
+                }
+            },
+            "voice_language": {
+                "name": "J\u0119zyk komunikat\u00f3w",
+                "state": {
+                    "german": "Niemiecki",
+                    "english": "Angielski",
+                    "french": "Francuski",
+                    "italian": "W\u0142oski"
+                }
+            },
+            "weather_announcement": {
+                "name": "Zapowied\u017a pogody",
+                "state": {
+                    "always": "Zawsze",
+                    "scheduled": "W wybranych godzinach",
+                    "off": "Wy\u0142\u0105czona"
+                }
+            },
+            "indicator_mode": {
+                "name": "Lampka wska\u017anika",
+                "state": {
+                    "off": "Wy\u0142\u0105czona",
+                    "on": "W\u0142\u0105czona",
+                    "auto": "Auto (czujnik \u015bwiat\u0142a)"
+                }
+            },
+            "motion_mode": {
+                "name": "Domy\u015blny tryb ruchu",
+                "state": {
+                    "performance": "Wydajny",
+                    "quietdrift": "QuietDrift",
+                    "silent": "Cichy"
+                }
+            },
+            "motor_mode": {
+                "name": "Tryb silnika",
+                "state": {
+                    "performance": "Wydajny",
+                    "quiet": "Cichy",
+                    "quietdrift": "QuietDrift"
+                }
+            }
+        },
+        "sensor": {
+            "aqi_quality_level": {
+                "name": "Jako\u015b\u0107 powietrza",
+                "state": {
+                    "excellent": "Doskona\u0142a",
+                    "good": "Dobra",
+                    "moderate": "Umiarkowana",
+                    "unhealthy": "Niezdrowa"
+                }
+            },
+            "battery_range": {
+                "name": "Zakres baterii",
+                "state": {
+                    "critical": "Krytyczny",
+                    "high": "Wysoki",
+                    "low": "Niski",
+                    "medium": "\u015aredni"
+                }
+            },
+            "bluetooth_signal": {
+                "name": "Sygna\u0142 Bluetooth"
+            },
+            "filter_usage": {
+                "name": "Zu\u017cycie filtra"
+            },
+            "light_level": {
+                "name": "Poziom \u015bwiat\u0142a"
+            },
+            "pir_triggered_level": {
+                "name": "Poziom wyzwolenia PIR"
+            },
+            "radar_triggered_distance": {
+                "name": "Odleg\u0142o\u015b\u0107 wyzwolenia radaru"
+            },
+            "radar_triggered_level": {
+                "name": "Poziom wyzwolenia radaru"
+            },
+            "water_level": {
+                "name": "Poziom wody",
+                "state": {
+                    "empty": "Pusty",
+                    "high": "Wysoki",
+                    "low": "Niski",
+                    "medium": "\u015aredni"
+                }
+            },
+            "wifi_signal": {
+                "name": "Sygna\u0142 Wi-Fi"
+            },
+            "knob_angle": {
+                "name": "K\u0105t pokr\u0119t\u0142a"
+            },
+            "backup_battery": {
+                "name": "Bateria zapasowa"
+            },
+            "battery_status": {
+                "name": "Tryb zasilania z baterii"
+            },
+            "lock_type": {
+                "name": "Typ wk\u0142adki"
+            },
+            "action_source": {
+                "name": "\u0179r\u00f3d\u0142o ostatniej akcji"
+            },
+            "door_status_source": {
+                "name": "\u0179r\u00f3d\u0142o stanu drzwi"
+            },
+            "latch_state": {
+                "name": "Stan zapadki"
+            },
+            "rotation_direction": {
+                "name": "Kierunek obrotu"
+            },
+            "night_auto_lock_delay": {
+                "name": "Op\u00f3\u017anienie nocnego zamykania"
+            },
+            "night_motor_speed": {
+                "name": "Pr\u0119dko\u015b\u0107 silnika w nocy",
+                "state": {
+                    "fast": "Szybka",
+                    "normal": "Normalna",
+                    "quiet": "Cicha"
+                }
+            },
+            "drive_force": {
+                "name": "Si\u0142a nap\u0119du",
+                "state": {
+                    "gentle": "\u0141agodna",
+                    "standard": "Standardowa",
+                    "strong": "Maksymalna"
+                }
+            },
+            "night_lock_position": {
+                "name": "Pozycja zamkni\u0119cia w nocy",
+                "state": {
+                    "full_lock": "Pe\u0142ne zamkni\u0119cie",
+                    "half_lock": "Cz\u0119\u015bciowe zamkni\u0119cie"
+                }
+            },
+            "night_mode_start": {
+                "name": "Pocz\u0105tek trybu nocnego"
+            },
+            "night_mode_end": {
+                "name": "Koniec trybu nocnego"
+            },
+            "drive_force_raw": {
+                "name": "Si\u0142a nap\u0119du (surowa)"
+            },
+            "event_counter": {
+                "name": "Licznik zdarze\u0144"
+            },
+            "passcodes_count": {
+                "name": "Kody PIN"
+            },
+            "nfc_cards_count": {
+                "name": "Karty NFC"
+            },
+            "left_pack_battery": {
+                "name": "Lewy pakiet baterii"
+            },
+            "right_pack_battery": {
+                "name": "Prawy pakiet baterii"
+            },
+            "power_supply_mode": {
+                "name": "Tryb zasilania"
+            },
+            "off_timer_remaining": {
+                "name": "Pozosta\u0142y czas do wy\u0142\u0105czenia"
+            },
+            "horizontal_swing_angle": {
+                "name": "K\u0105t obrotu w poziomie"
+            },
+            "vertical_swing_angle": {
+                "name": "K\u0105t obrotu w pionie"
+            },
+            "filter_hours_since_clean": {
+                "name": "Czas od czyszczenia filtra"
+            },
+            "filter_hours_since_replace": {
+                "name": "Czas od wymiany filtra"
+            },
+            "drying_remaining": {
+                "name": "Pozosta\u0142y czas suszenia"
+            },
+            "delay_remaining": {
+                "name": "Pozosta\u0142y czas op\u00f3\u017anienia"
+            },
+            "fast_heat_remaining": {
+                "name": "Pozosta\u0142y czas szybkiego grzania"
+            },
+            "mcu_version": {
+                "name": "Wersja MCU"
+            },
+            "detection_distance": {
+                "name": "Zasi\u0119g wykrywania",
+                "state": {
+                    "long": "Daleki (8 m)",
+                    "medium": "\u015aredni (4 m)",
+                    "short": "Bliski (2 m)"
+                }
+            },
+            "alarm_mode": {
+                "name": "Tryb alarmu",
+                "state": {
+                    "leak": "Alarm zalania",
+                    "dry": "Alarm sucho\u015bci"
+                }
+            },
+            "alarm_volume": {
+                "name": "G\u0142o\u015bno\u015b\u0107 alarmu",
+                "state": {
+                    "quiet": "Cichy",
+                    "low": "Niska",
+                    "medium": "\u015arednia",
+                    "high": "Wysoka"
+                }
+            },
+            "alarm_count": {
+                "name": "Licznik alarm\u00f3w"
+            },
+            "alarm_duration": {
+                "name": "Czas trwania alarmu"
+            },
+            "alarm_interval": {
+                "name": "Odst\u0119p alarm\u00f3w"
+            },
+            "charge_status": {
+                "name": "Stan \u0142adowania",
+                "state": {
+                    "not_charging": "Nie \u0142aduje",
+                    "adapter_charging": "\u0141adowanie (zasilacz)",
+                    "solar_charging": "\u0141adowanie (panel s\u0142oneczny)",
+                    "adapter_full": "Na\u0142adowana (zasilacz)",
+                    "solar_full": "Na\u0142adowana (panel s\u0142oneczny)",
+                    "solar_idle": "Panel s\u0142oneczny, bez \u0142adowania",
+                    "error": "B\u0142\u0105d"
+                }
+            },
+            "mount_type": {
+                "name": "Monta\u017c",
+                "state": {
+                    "u_rail": "Szyna U",
+                    "rod": "Dr\u0105\u017cek",
+                    "i_rail": "Szyna I"
+                }
+            },
+            "chain_length": {
+                "name": "Po\u0142\u0105czone urz\u0105dzenia"
+            },
+            "builtin_battery": {
+                "name": "Bateria wbudowana"
+            },
+            "extended_battery": {
+                "name": "Dodatkowa bateria"
+            },
+            "motor_stop_reason": {
+                "name": "Przyczyna zatrzymania silnika",
+                "state": {
+                    "none": "Brak",
+                    "move_timeout": "Przekroczony czas ruchu",
+                    "step_timeout": "Brak krok\u00f3w silnika",
+                    "stuck": "Zablokowanie",
+                    "target_reached": "Osi\u0105gni\u0119to cel",
+                    "command": "Polecenie zatrzymania",
+                    "normal": "Normalnie",
+                    "idle": "Bezczynno\u015b\u0107",
+                    "fully_closed": "Ca\u0142kowicie rozwini\u0119ta",
+                    "fully_open": "Ca\u0142kowicie zwini\u0119ta"
+                }
+            },
+            "crash_reason": {
+                "name": "Przyczyna ostatniego restartu",
+                "state": {
+                    "none": "Brak",
+                    "hard_fault": "B\u0142\u0105d krytyczny",
+                    "rom_watchdog": "Watchdog (ROM)",
+                    "aon_watchdog": "Watchdog (AON)"
+                }
+            },
+            "roll_direction": {
+                "name": "Kierunek zwijania",
+                "state": {
+                    "standard": "Standardowy",
+                    "reverse": "Odwr\u00f3cony"
+                }
+            },
+            "slat_direction": {
+                "name": "Uk\u0142ad lameli",
+                "state": {
+                    "horizontal": "Lamele poziome",
+                    "vertical": "Lamele pionowe"
+                }
+            }
+        },
+        "switch": {
+            "bot": {
+                "state_attributes": {
+                    "switch_mode": {
+                        "state": {
+                            "false": "Chwilowy",
+                            "true": "Wci\u015bnij/zwolnij"
+                        }
+                    }
+                }
+            },
+            "child_lock": {
+                "name": "Blokada przed dzie\u0107mi"
+            },
+            "horizontal_oscillation": {
+                "name": "Oscylacja pozioma"
+            },
+            "vertical_oscillation": {
+                "name": "Oscylacja pionowa"
+            },
+            "wireless_charging": {
+                "name": "\u0141adowanie bezprzewodowe"
+            },
+            "half_lock_enabled": {
+                "name": "Cz\u0119\u015bciowe zamkni\u0119cie w\u0142\u0105czone"
+            },
+            "led_enabled": {
+                "name": "Dioda LED"
+            },
+            "sound_enabled": {
+                "name": "D\u017awi\u0119k"
+            },
+            "button_enabled": {
+                "name": "Przycisk na zamku"
+            },
+            "auto_lock_enabled": {
+                "name": "Automatyczne zamykanie"
+            },
+            "force_auto_lock_enabled": {
+                "name": "Wymuszone automatyczne zamykanie"
+            },
+            "unclosed_alarm_enabled": {
+                "name": "Alarm otwartych drzwi w\u0142\u0105czony"
+            },
+            "unlocked_alarm_enabled": {
+                "name": "Alarm niezamkni\u0119tego zamka w\u0142\u0105czony"
+            },
+            "night_mode_enabled": {
+                "name": "Tryb nocny"
+            },
+            "auto_lock_paused": {
+                "name": "Wstrzymanie auto-zamykania"
+            },
+            "keypad_enabled": {
+                "name": "Klawiatura w\u0142\u0105czona"
+            },
+            "tamper_alarm_enabled": {
+                "name": "Alarm zdj\u0119cia z mocowania"
+            },
+            "beep_enabled": {
+                "name": "D\u017awi\u0119k"
+            },
+            "display": {
+                "name": "Wy\u015bwietlacz"
+            },
+            "sound": {
+                "name": "D\u017awi\u0119k przycisk\u00f3w"
+            },
+            "auto_recenter": {
+                "name": "Powr\u00f3t do \u015brodka"
+            },
+            "indicator_light": {
+                "name": "Lampka wska\u017anika"
+            },
+            "horizontal_recenter": {
+                "name": "Powr\u00f3t do \u015brodka w poziomie po wy\u0142\u0105czeniu"
+            },
+            "vertical_recenter": {
+                "name": "Powr\u00f3t do \u015brodka w pionie po wy\u0142\u0105czeniu"
+            },
+            "over_humidify_protection": {
+                "name": "Ochrona przed przewil\u017ceniem"
+            },
+            "prompt_sound": {
+                "name": "D\u017awi\u0119k powiadomie\u0144"
+            },
+            "alarm_sound": {
+                "name": "D\u017awi\u0119k alarmu"
+            },
+            "dnd_enabled": {
+                "name": "Nie przeszkadza\u0107"
+            },
+            "window_detection": {
+                "name": "Wykrywanie otwartego okna"
+            },
+            "anti_frost": {
+                "name": "Ochrona przed zamarzaniem"
+            },
+            "descaling": {
+                "name": "Odkamienianie"
+            },
+            "touch_and_go": {
+                "name": "Touch & Go"
+            }
+        },
+        "vacuum": {
+            "vacuum": {}
+        },
+        "time": {
+            "dnd_start": {
+                "name": "Nie przeszkadza\u0107 od"
+            },
+            "dnd_end": {
+                "name": "Nie przeszkadza\u0107 do"
+            }
+        }
+    },
+    "exceptions": {
+        "advertising_state_error": {
+            "message": "{address} nie rozg\u0142asza stanu"
+        },
+        "device_not_found_error": {
+            "message": "Nie znaleziono urz\u0105dzenia Switchbot {sensor_type} o adresie {address}: {reason}"
+        },
+        "device_without_config_entry": {
+            "message": "Urz\u0105dzenie {device_id} nie jest powi\u0105zane z \u017cadnym wpisem konfiguracji."
+        },
+        "model_not_determined_error": {
+            "message": "Nie uda\u0142o si\u0119 ustali\u0107 modelu urz\u0105dzenia Switchbot {sensor_type} o adresie {address} na podstawie rozg\u0142osze\u0144 Bluetooth; mo\u017ce by\u0107 potrzebny aktywnie skanuj\u0105cy adapter lub proxy Bluetooth w zasi\u0119gu: {reason}"
+        },
+        "not_keypad_vision_device": {
+            "message": "Ta us\u0142uga dzia\u0142a tylko z urz\u0105dzeniami SwitchBot Keypad Vision."
+        },
+        "operation_error": {
+            "message": "Podczas wykonywania akcji wyst\u0105pi\u0142 b\u0142\u0105d: {error}"
+        },
+        "set_fan_state_failed": {
+            "message": "Nie uda\u0142o si\u0119 wys\u0142a\u0107 polecenia do wentylatora."
+        },
+        "value_error": {
+            "message": "Inicjalizacja urz\u0105dzenia Switchbot nie powiod\u0142a si\u0119 z powodu nieprawid\u0142owych parametr\u00f3w konfiguracji: {error}"
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "curtain_speed": "Tryb ruchu zas\u0142ony",
+                    "lock_force_nightlatch": "Wymu\u015b tryb Nightlatch",
+                    "retry_count": "Liczba ponownych pr\u00f3b"
+                },
+                "data_description": {
+                    "curtain_speed": "Tryb ruchu polece\u0144 bez w\u0142asnej pr\u0119dko\u015bci (Curtain 3 i Curtain Track 4). QuietDrift jedzie 27 cm/min; \u201eDomy\u015blna urz\u0105dzenia\u201d u\u017cywa trybu zapisanego w zas\u0142onie.",
+                    "lock_force_nightlatch": "Wymu\u015b tryb Nightlatch, nawet je\u015bli nie zosta\u0142 wykryty",
+                    "retry_count": "Ile razy ponawia\u0107 wysy\u0142anie polece\u0144 do urz\u0105dze\u0144 SwitchBot"
+                }
+            }
+        }
+    },
+    "services": {
+        "add_password": {
+            "description": "Dodaj has\u0142o do urz\u0105dzenia Keypad Vision.",
+            "fields": {
+                "device_id": {
+                    "description": "Identyfikator urz\u0105dzenia Keypad Vision",
+                    "name": "ID urz\u0105dzenia"
+                },
+                "password": {
+                    "description": "Has\u0142o z 6\u201312 cyfr",
+                    "name": "Has\u0142o"
+                }
+            },
+            "name": "Dodaj has\u0142o"
+        }
+    },
+    "selector": {
+        "curtain_speed": {
+            "options": {
+                "default": "Domy\u015blna urz\u0105dzenia",
+                "performance": "Wydajna",
+                "quietdrift": "QuietDrift",
+                "silent": "Cicha"
+            }
+        }
+    }
+}
