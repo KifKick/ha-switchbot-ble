@@ -53,6 +53,8 @@ End-to-end test with Playwright, driving every demo device and wizard: `python3 
 
 `.github/workflows/ci.yml` runs on every push to `main` and every pull request: ruff and pytest, the panel build (and that the committed bundle is current), hassfest and the HACS validation.
 
+`main` requires these four checks before a pull request merges (administrators may push directly). Dependabot keeps the GitHub Actions up to date weekly; its patch and minor updates merge by themselves once the checks pass (`dependabot-automerge.yml`), major updates wait for a review.
+
 ## Releasing
 
 1. Set the new version in `custom_components/ha_switchbot_ble/manifest.json` (semantic versioning) and commit it.
